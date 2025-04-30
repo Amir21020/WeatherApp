@@ -1,83 +1,97 @@
 <template>
   <div>
-    <p class="mt-3 mb-3 text-light">Weather Details...</p>
-    <div class="ms-3">
-      <h6 class="mb-4">THUNDERSTORM WITH LIGHT DRIZZLE</h6>
+    <h4 class="mt-4 mb-3">Information about the current weather...</h4>
+    <h5 class="ms-2 mb-4">Overall: {{ briefInformation }}</h5>
+    <div class="ms-4">      
       <div class="d-flex flex-column">
-        <WeatherMetric
-          v-for="metric in metrics"
-          :key="metric.label"
-          :label="metric.label"
-          :value="metric.value"
-          :icon-src="metric.iconSrc"
-          :icon-class="metric.iconClass"
-          :icon-style="metric.iconStyle"
-          :icon-alt="metric.iconAlt"
-          :icon-height="metric.iconHeight"
-          :icon-width="metric.iconWidth"
-          :class="metric.class"
-        />
+        <div class="d-flex flex-row align-items-center">
+          <p class="d-flex flex-fill align-items-center" :class="{ 'me-2 mb-0': isPressure }">Temperature</p>
+          <p class="me-3 align-items-center" :class="{ 'me-2 mb-0': isPressure }">{{ temperature }}</p>
+          <img
+            :src='tempIcon'
+            alt='Temp max'
+            class='d-flex align-self-center me-5 mb-2'
+            style='margin-top: -5px;'
+          >
+        </div>
       </div>
+      <div class="d-flex flex-column">
+        <div class="d-flex flex-row align-items-center">
+          <p class="d-flex flex-fill align-items-center" :class="{ 'me-2 mb-0': isPressure }">Cloud cover</p>
+          <p class="me-3 align-items-center" :class="{ 'me-2 mb-0': isPressure }">{{ cloud }}</p>
+          <img
+            src='/cloudy.svg'
+            alt='Cloudy'
+            class='d-flex align-self-center me-5 mb-2'
+            style='margin-top: -5px;'
+          >
+        </div>
+      </div>
+      <div class="d-flex flex-column">
+        <div class="d-flex flex-row align-items-center">
+          <p class="d-flex flex-fill align-items-center" :class="{ 'me-2 mb-0': isPressure }">Humidity</p>
+          <p class="me-3 align-items-center" :class="{ 'me-2 mb-0': isPressure }">{{ humidity }}</p>
+          <img
+            src='/outline.svg'
+            alt='Cloudy'
+            class='d-flex align-self-center me-5 mb-2'
+            style='margin-top: -5px;'
+          >
+        </div>
+      </div>
+      <div class="d-flex flex-column">
+        <div class="d-flex flex-row align-items-center">
+          <p class="d-flex flex-fill align-items-center" :class="{ 'me-2 mb-0': isPressure }">Wind</p>
+          <p class="me-3 align-items-center" :class="{ 'me-2 mb-0': isPressure }"></p>
+          <img
+            src='/direction.png'
+            alt='Wind'
+            class='d-flex align-self-center me-3 mb-2'
+            :style='dynamicStyle'
+          >
+          <p class="me-3 align-items-center" :class="{ 'me-2 mb-0': isPressure }">{{ windSpeed }}</p>
+          <img
+            src='/wind.svg'
+            alt='Wind'
+            class='d-flex align-self-center me-5 mb-2'
+            style='margin-top: -5px;'
+          >
+        </div>
+      </div>
+      <div class="d-flex flex-column">
+        <div class="d-flex flex-row align-items-center">
+          <p class="d-flex flex-fill align-items-center" :class="{ 'me-2 mb-0': isPressure }">Pressure</p>
+          <p class="me-3 align-items-center" :class="{ 'me-2 mb-0': isPressure }">{{ pressure }}</p>
+          <img
+            src='/preasure.svg'
+            alt='Pressure'
+            class='d-flex align-self-center me-5 mb-2 weather-icon'
+            style='margin-top: -5px;'
+            height='30'
+            width='30'
+          >
+        </div>
+      </div>      
     </div>
   </div>
 </template>
 
 <script setup>
-import WeatherMetric from './WeatherMetric.vue';
+  import { computed } from 'vue';
 
-const metrics = [
-  {
-    label: 'Temp max',
-    value: '19',
-    iconSrc: '/temp_max.svg',
-    iconClass: 'd-flex align-self-center me-5 mb-2',
-    iconStyle: 'margin-top: -5px;',
-    iconAlt: 'Temp max',
-  },
-  {
-    label: 'Temp min',
-    value: '15',
-    iconSrc: '/temp_min.svg',
-    iconClass: 'd-flex align-self-center me-5 mb-2',
-    iconStyle: 'margin-top: -5px;',
-    iconAlt: 'Temp min',
-  },
-  {
-    label: 'Humidity',
-    value: '58%',
-    iconSrc: '/outline.svg',
-    iconClass: 'd-flex align-self-center me-5 mb-2',
-    iconStyle: 'margin-top: -5px;',
-    iconAlt: 'Humidity',
-  },
-  {
-    label: 'Cloudy',
-    value: '86%',
-    iconSrc: '/cloudy.svg',
-    iconClass: 'd-flex align-self-center me-5 mb-2',
-    iconStyle: 'margin-top: -5px;',
-    iconAlt: 'Cloudy',
-  },
-  {
-    label: 'Wind',
-    value: '5km/h',
-    iconSrc: '/wind.svg',
-    iconClass: 'd-flex align-self-center me-5 mb-2',
-    iconStyle: 'margin-top: -5px;',
-    iconAlt: 'Wind',
-  },
-  {
-    label: 'Pressure',
-    value: '1013 hPa',
-    iconSrc: '/preasure.svg',
-    iconClass: 'd-flex align-self-center me-5 mb-2 weather-icon',
-    iconStyle: 'margin-top: -5px;',
-    iconAlt: 'Pressure',
-    iconHeight: '30',
-    iconWidth: '30',
-    class: 'mb-5',
-  },
-];
+  const props = defineProps({
+    'temperature': String,
+    'windSpeed': String,
+    'windDirection': String,
+    'humidity': String, 
+    'cloud': String, 
+    'pressure': String,
+    'briefInformation': String,
+    'dynamicStyle': String,
+    'tempIcon': String
+  });
+
+  const isPressure = false
 </script>
 
 <style scoped>
