@@ -14,29 +14,31 @@
   </div>
 </template>
 
+
 <script setup>
-  defineProps({
-    time: {
-      type: String,
-      required: true
-    },
-    condition: {
-      type: String,
-      required: true
-    },
-    temperature: {
-      type: String,
-      required: true
-    },
-    iconSrc: {
-      type: String,
-      required: true
-    }
-  });
+defineProps({
+  time: {
+    type: String,
+    required: true
+  },
+  condition: {
+    type: String,
+    required: true
+  },
+  temperature: {
+    type: String,
+    required: true
+  },
+  iconSrc: {
+    type: String,
+    required: true
+  }
+});
 </script>
+
 
 <style scoped>
 .temperature {
-  font-size: 24px; 
+  font-size: 24px;
 }
 </style>

@@ -83,9 +83,7 @@ const fetchForecast = async () => {
       alerts: 'no',
     };
 
-    onMounted(() => {
-      fetchForecast();
-    });
+    const inputValue = locationName.value.trim();
 
     if (!inputValue) {
       toast.error('Введите название места или координаты');
@@ -168,11 +166,39 @@ const fetchForecast = async () => {
     console.error('Ошибка при получении данных:', error);
     toast.error('Не удалось получить данные о погоде');
   }
-  
-  .search-icon {
-    width: 20px;
-    height: 20px;
-    filter: brightness(0) invert(1) opacity(0.8);
+};
+
+const getTimeOfDay = () => {
+  const sunrise = weatherData.sunrise;
+  const sunset = weatherData.sunset;
+  const currentTime = new Date(weatherData.time).toLocaleTimeString();
+
+  if (!sunrise || !sunset || !currentTime) return 'day'; 
+
+  const sunriseTime = new Date(`2000-01-01 ${sunrise}`).getTime();
+  const sunsetTime = new Date(`2000-01-01 ${sunset}`).getTime();
+  const current = new Date(`2000-01-01 ${currentTime}`).getTime();
+
+  const oneHour = 3600000;
+
+  if (current >= sunriseTime - oneHour && current < sunriseTime) return 'dawn';
+  if (current >= sunriseTime && current < sunriseTime + oneHour) return 'sunrise';
+  if (current >= sunriseTime + oneHour && current < sunsetTime - oneHour) return 'day';
+  if (current >= sunsetTime - oneHour && current < sunsetTime) return 'golden_hour';
+  if (current >= sunsetTime && current < sunsetTime + oneHour) return 'twilight';
+  if (current >= sunsetTime + oneHour || current < sunriseTime - oneHour) return 'night';
+};
+
+const getWeatherCondition = () => {
+  const { condition, precip, cloudy } = weatherData;
+
+  if (!condition) return 'clearly';
+
+  if (condition.toLowerCase().includes('thunderstorm')) return 'thunderstorm';
+  if (condition.toLowerCase().includes('snow') || condition.toLowerCase().includes('sleet')) return 'snow';
+  if (condition.toLowerCase().includes('hail')) return 'hail';
+  if (condition.toLowerCase().includes('rain') || condition.toLowerCase().includes('drizzle') || precip > 0) {
+    return condition.toLowerCase().includes('freezing') ? 'freezing_rain' : 'rain';
   }
   if (condition.toLowerCase().includes('fog') || condition.toLowerCase().includes('mist')) return 'fog';
   if (condition.toLowerCase().includes('sand') || condition.toLowerCase().includes('dust')) return 'sandstorm';
