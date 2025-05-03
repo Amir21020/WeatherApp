@@ -126,7 +126,7 @@ const fetchForecast = async () => {
       params.q = inputValue;
     }
 
-    const { data } = await axios.get('http://api.weatherapi.com/v1/forecast.json', { params });
+    const { data } = await axios.get('https://api.weatherapi.com/v1/forecast.json', { params });
     console.log('API response:', data); 
 
     weatherData.temperatureMax = `${data.forecast.forecastday[0].day.maxtemp_c}°`;
