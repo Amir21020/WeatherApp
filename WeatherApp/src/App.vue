@@ -34,7 +34,7 @@ import Header from './components/Header.vue';
 import WeatherDetails from './components/WeatherDetails.vue';
 import WeatherFooter from './components/WeatherFooter.vue';
 import WeatherForecastList from './components/WeatherForecastList.vue';
-import { ref, reactive, onMounted, onBeforeUnmount, computed } from 'vue';
+import { ref, reactive, onMounted, onBeforeUnmount } from 'vue';
 import { useToast } from 'vue-toastification';
 
 const toast = useToast();
@@ -72,7 +72,7 @@ const isCoordinatesInput = (input) => {
 const fetchForecast = async () => {
   try {
     if (!locationName?.value) {
-      toast.error('Не указано название места или координаты');
+      toast.error('Location name or coordinates not specified');
       return;
     }
 
@@ -86,41 +86,41 @@ const fetchForecast = async () => {
     const inputValue = locationName.value.trim();
 
     if (!inputValue) {
-      toast.error('Введите название места или координаты');
+      toast.error('Please enter a location name or coordinates');
       return;
     }
 
     if (isCoordinatesInput(inputValue)) {
       const coords = inputValue.split(',').map((coord) => coord.trim());
       if (coords.length !== 2) {
-        toast.error('Неверный формат координат. Используйте "широта, долгота"');
+        toast.error('Invalid coordinates format. Use "latitude, longitude"');
         return;
       }
       const [lat, lon] = coords;
       if (isNaN(lat) || isNaN(lon)) {
-        toast.error('Координаты должны быть числами');
+        toast.error('Coordinates must be numbers');
         return;
       }
       if (lat < -90 || lat > 90) {
-        toast.error('Широта должна быть между -90 и 90 градусами');
+        toast.error('Latitude must be between -90 and 90 degrees');
         return;
       }
       if (lon < -180 || lon > 180) {
-        toast.error('Долгота должна быть между -180 и 180 градусами');
+        toast.error('Longitude must be between -180 and 180 degrees');
         return;
       }
       params.q = `${lat},${lon}`;
     } else {
       if (inputValue.length < 2) {
-        toast.error('Название места слишком короткое');
+        toast.error('Location name is too short');
         return;
       }
       if (inputValue.length > 100) {
-        toast.error('Название места слишком длинное');
+        toast.error('Location name is too long');
         return;
       }
       if (/[<>]/.test(inputValue)) {
-        toast.error('Название места содержит недопустимые символы');
+        toast.error('Location name contains invalid characters');
         return;
       }
       params.q = inputValue;
@@ -160,11 +160,11 @@ const fetchForecast = async () => {
         iconSrc: hourData.condition.icon,
       };
     });
-    locationName.value = ''
+    locationName.value = '';
 
   } catch (error) {
-    console.error('Ошибка при получении данных:', error);
-    toast.error('Не удалось получить данные о погоде');
+    console.error('Error fetching weather data:', error);
+    toast.error('Failed to get weather data');
   }
 };
 
@@ -208,7 +208,7 @@ const getWeatherCondition = () => {
   return 'clearly';
 };
 
-const getBackgroundImage = computed(() => {
+const getBackgroundImage = (() => {
   let timeOfDay = getTimeOfDay();
   let weatherCondition = getWeatherCondition();
   let basePath = '/WeatherApp/dynamicWeather';
@@ -221,7 +221,8 @@ onMounted(() => {
   fetchForecast().then(() => {
     console.log('fetchForecast completed, getBackgroundImage:', getBackgroundImage.value);
   });
-  autoUpdateInterval.value = setInterval(fetchForecast, 1800000); 
+  autoUpdateInterval.value = setInterval(fetchForecast, 1800000);
+  getBackgroundImage(); 
 });
 
 onBeforeUnmount(() => {
