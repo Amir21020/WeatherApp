@@ -1,43 +1,29 @@
 <template>
-  <div class="weather-bg text-light" :style="styleImg">
-    <Header></Header>
+  <div class="weather-bg text-light" :style="{ backgroundImage: `url(${getBackgroundImage})` }">
+    <Header />
     <div class="blur-right border border-secondary border-start border-1 border-opacity-10">
       <div class="ms-5 mt-3 mb-3">
-        <div class="input-group pe-5">
-          <input 
-            v-model="locationName"
-            @keypress="handleKeyPress"
-            type="text"
-            class="form-control weather-input text-light"
-            placeholder="Search Location..."
-            aria-label="Search city"
-          />
-          <button class="btn bg-transparent border-light border-opacity-50 border-start-0" @click="fetchForecast">
-            <img src="/fa_search.svg" alt="Search" class="search-icon" />
-          </button>
+        <SearchBar v-model="locationName" @search="fetchForecast"></SearchBar>
+        <WeatherDetails
+          :temperatureMax="weatherData.temperatureMax"
+          :temperatureMin="weatherData.temperatureMin"
+          :humidity="weatherData.humidity"
+          :cloudy="weatherData.cloudy"
+          :wind="weatherData.windSpeed"
+          :pressure="weatherData.pressure"
+        ></WeatherDetails>
+        <div class="border-top me-5">
+          <h4 class="mt-3 mb-5">Today's Weather Forecast...</h4>
+          <WeatherForecastList :forecasts="weatherData.hours"></WeatherForecastList>
         </div>
-        <WeatherDetails 
-          :temperature="temperature" 
-          :windSpeed="windSpeed"
-          :windDirection="windDirection" 
-          :humidity="humidity"
-          :cloud="cloud"
-          :pressure="pressure"
-          :briefInformation="briefInformation"
-          :dynamicStyle="dynamicStyle"
-          :tempIcon="tempIcon">
-        </WeatherDetails>
-        <WeatherForecastList 
-          :hours="hours">
-        </WeatherForecastList>
       </div>
     </div>
-    <WeatherFooter 
-      :location="location" 
-      :time="time" 
-      :weatherIcon="weatherIcon" 
-      :temperature="temperature">
-    </WeatherFooter>
+    <WeatherFooter
+      :temperature="weatherData.temperature"
+      :location="weatherData.location"
+      :time="weatherData.time"
+      :weatherIcon="weatherData.weatherIcon"
+    ></WeatherFooter>
   </div>
 </template>
 
