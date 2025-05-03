@@ -14,59 +14,81 @@
 </template>
 
 <script setup>
-import { computed, onMounted, onBeforeUnmount, ref } from 'vue';
-
+import { computed, onMounted, onBeforeUnmount, ref, watch } from 'vue';
 
 const props = defineProps({
   temperature: {
     type: String,
-    default: "16°"
+    default: '16°',
   },
   location: {
     type: String,
-    default: "London"
+    default: 'London',
   },
   time: {
     type: String,
-    default: "2023-09-09 06:09"
+    default: '2023-09-09 06:09',
   },
   weatherIcon: {
     type: String,
-    default: "/cloudy.svg"
+    default: '/cloudy.svg',
   },
   weatherCondition: {
     type: String,
-    default: "Cloudy"
-  }
+    default: 'Cloudy',
+  },
 });
 
-const currentTime = ref(new Date(props.time));
+const currentTime = ref(
+  props.time && !isNaN(new Date(props.time)) ? new Date(props.time) : new Date()
+);
+
+// Log initial props.time for debugging
+console.log('Initial props.time:', props.time);
+console.log('Initial currentTime:', currentTime.value);
+
+// Watch for changes in props.time
+watch(
+  () => props.time,
+  (newTime) => {
+    console.log('Watch triggered - new props.time:', newTime);
+    if (newTime && !isNaN(new Date(newTime))) {
+      currentTime.value = new Date(newTime);
+      console.log('Updated currentTime:', currentTime.value);
+    } else {
+      console.warn('Invalid props.time, using current time:', newTime);
+      currentTime.value = new Date();
+      toast.error('Invalid time received from API');
+    }
+  },
+  { immediate: true } // Run immediately to catch initial props.time
+);
 
 let intervalId;
 onMounted(() => {
-  updateTime();
-  intervalId = setInterval(updateTime, 60000); 
+  console.log('WeatherFooter mounted, starting interval');
+  intervalId = setInterval(() => {
+    currentTime.value = new Date(currentTime.value.getTime() + 60000);
+    console.log('Interval tick - currentTime:', currentTime.value);
+  }, 60000); // Update every minute
 });
 
 onBeforeUnmount(() => {
+  console.log('WeatherFooter unmounting, clearing interval');
   clearInterval(intervalId);
 });
 
-function updateTime() {
-  currentTime.value = new Date();
-}
-
-
 const formattedTime = computed(() => {
-  const date = new Date(props.time);
-  
+  const date = currentTime.value;
+  console.log('Computing formattedTime:', date);
+
   const hours = String(date.getHours()).padStart(2, '0');
   const minutes = String(date.getMinutes()).padStart(2, '0');
   const day = date.getDate();
   const month = date.toLocaleString('en-US', { month: 'short' });
   const year = String(date.getFullYear()).slice(-2);
   const weekday = date.toLocaleString('en-US', { weekday: 'long' });
-  
+
   return `${hours}:${minutes} - ${weekday}, ${day} ${month} '${year}`;
 });
 </script>
