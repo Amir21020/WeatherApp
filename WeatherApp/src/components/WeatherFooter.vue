@@ -6,7 +6,9 @@
         <p class="mb-0" style="font-size: 4rem;">{{ location }}</p>
         <p class="mb-0" style="font-size: 1.15rem;">{{ formattedTime }}</p>
       </div>
-      <img :src="weatherIcon" :alt="weatherCondition" class="ms-3 align-self-start" style="width: 80px; margin-top: 2.3%;">
+      <img
+       :src="weatherIcon" :alt="weatherCondition" class="ms-3 align-self-start"
+        style="width: 80px;  margin-top: 2.3%;">
     </div>
   </div>
 </template>

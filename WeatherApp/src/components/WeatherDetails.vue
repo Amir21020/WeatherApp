@@ -40,7 +40,7 @@ const metrics = computed(() =>  [
   {
     label: 'Temp max',
     value: props.temperatureMax , 
-    iconSrc: '/temp_max.svg',
+    iconSrc: '/WeatherApp/temp_max.svg',
     iconClass: 'd-flex align-self-center me-5 mb-2',
     iconStyle: 'margin-top: -5px;',
     iconAlt: 'Temp max',
@@ -48,7 +48,7 @@ const metrics = computed(() =>  [
   {
     label: 'Temp min',
     value: props.temperatureMin, 
-    iconSrc: '/temp_min.svg',
+    iconSrc: '/WeatherApp/temp_min.svg',
     iconClass: 'd-flex align-self-center me-5 mb-2',
     iconStyle: 'margin-top: -5px;',
     iconAlt: 'Temp min',
@@ -56,7 +56,7 @@ const metrics = computed(() =>  [
   {
     label: 'Humidity',
     value: props.humidity, 
-    iconSrc: '/outline.svg',
+    iconSrc: '/WeatherApp/outline.svg',
     iconClass: 'd-flex align-self-center me-5 mb-2',
     iconStyle: 'margin-top: -5px;',
     iconAlt: 'Humidity',
@@ -64,7 +64,7 @@ const metrics = computed(() =>  [
   {
     label: 'Cloudy',
     value: props.cloudy, 
-    iconSrc: '/cloudy.svg',
+    iconSrc: '/WeatherApp/cloudy.svg',
     iconClass: 'd-flex align-self-center me-5 mb-2',
     iconStyle: 'margin-top: -5px;',
     iconAlt: 'Cloudy',
@@ -72,7 +72,7 @@ const metrics = computed(() =>  [
   {
     label: 'Wind',
     value: props.wind,
-    iconSrc: '/wind.svg',
+    iconSrc: '/WeatherApp/wind.svg',
     iconClass: 'd-flex align-self-center me-5 mb-2',
     iconStyle: 'margin-top: -5px;',
     iconAlt: 'Wind',
@@ -80,7 +80,7 @@ const metrics = computed(() =>  [
   {
     label: 'Pressure',
     value: props.pressure,
-    iconSrc: '/preasure.svg',
+    iconSrc: '/WeatherApp/preasure.svg',
     iconClass: 'd-flex align-self-center me-5 mb-2 weather-icon',
     iconStyle: 'margin-top: -5px;',
     iconAlt: 'Pressure',

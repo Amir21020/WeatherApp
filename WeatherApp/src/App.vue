@@ -211,7 +211,7 @@ const getWeatherCondition = () => {
 const getBackgroundImage = computed(() => {
   let timeOfDay = getTimeOfDay();
   let weatherCondition = getWeatherCondition();
-  let basePath = '/dynamicWeather';
+  let basePath = '/WeatherApp/dynamicWeather';
 
 
   return `${basePath}/${timeOfDay}-${weatherCondition}.jpg`;
