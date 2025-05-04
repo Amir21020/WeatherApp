@@ -43,11 +43,7 @@ const currentTime = ref(
   props.time && !isNaN(new Date(props.time)) ? new Date(props.time) : new Date()
 );
 
-// Log initial props.time for debugging
-console.log('Initial props.time:', props.time);
-console.log('Initial currentTime:', currentTime.value);
 
-// Watch for changes in props.time
 watch(
   () => props.time,
   (newTime) => {
@@ -58,10 +54,9 @@ watch(
     } else {
       console.warn('Invalid props.time, using current time:', newTime);
       currentTime.value = new Date();
-      toast.error('Invalid time received from API');
     }
   },
-  { immediate: true } // Run immediately to catch initial props.time
+  { immediate: true }
 );
 
 let intervalId;
@@ -70,7 +65,7 @@ onMounted(() => {
   intervalId = setInterval(() => {
     currentTime.value = new Date(currentTime.value.getTime() + 60000);
     console.log('Interval tick - currentTime:', currentTime.value);
-  }, 60000); // Update every minute
+  }, 60000); 
 });
 
 onBeforeUnmount(() => {

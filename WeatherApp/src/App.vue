@@ -34,7 +34,7 @@ import Header from './components/Header.vue';
 import WeatherDetails from './components/WeatherDetails.vue';
 import WeatherFooter from './components/WeatherFooter.vue';
 import WeatherForecastList from './components/WeatherForecastList.vue';
-import { ref, reactive, onMounted, onBeforeUnmount } from 'vue';
+import { ref, reactive, onMounted, onBeforeUnmount, computed } from 'vue';
 import { useToast } from 'vue-toastification';
 
 const toast = useToast();
@@ -127,8 +127,7 @@ const fetchForecast = async () => {
     }
 
     const { data } = await axios.get('https://api.weatherapi.com/v1/forecast.json', { params });
-    console.log('API response:', data); 
-
+    
     weatherData.temperatureMax = `${data.forecast.forecastday[0].day.maxtemp_c}°`;
     weatherData.temperatureMin = `${data.forecast.forecastday[0].day.mintemp_c}°`;
     weatherData.sunrise = data.forecast.forecastday[0].astro.sunrise;
@@ -160,10 +159,10 @@ const fetchForecast = async () => {
         iconSrc: hourData.condition.icon,
       };
     });
-    locationName.value = '';
+    locationName.value = ''
 
   } catch (error) {
-    console.error('Error fetching weather data:', error);
+    console.error('Ошибка при получении данных:', error);
     toast.error('Failed to get weather data');
   }
 };
@@ -208,9 +207,11 @@ const getWeatherCondition = () => {
   return 'clearly';
 };
 
-const getBackgroundImage = (() => {
+const getBackgroundImage = computed (() => {
   let timeOfDay = getTimeOfDay();
+  console.log(timeOfDay)
   let weatherCondition = getWeatherCondition();
+  console.log(weatherCondition)
   let basePath = '/WeatherApp/dynamicWeather';
 
 
@@ -221,8 +222,8 @@ onMounted(() => {
   fetchForecast().then(() => {
     console.log('fetchForecast completed, getBackgroundImage:', getBackgroundImage.value);
   });
-  autoUpdateInterval.value = setInterval(fetchForecast, 1800000);
   getBackgroundImage(); 
+  autoUpdateInterval.value = setInterval(fetchForecast, 1800000);
 });
 
 onBeforeUnmount(() => {
