@@ -56,23 +56,3 @@ npm run build
 ```bash
 npm run deploy
 ```
-
-## Структура проекта
-
-```
-src/
-├── composables/
-│   ├── useClock.js      # Умные часы с автообновлением
-│   └── useWeather.js    # Логика погоды (запросы, вычисления, фоны)
-├── components/
-│   ├── Header.vue
-│   ├── SearchBar.vue
-│   ├── SearchSuggestions.vue
-│   ├── WeatherDetails.vue
-│   ├── WeatherFooter.vue
-│   ├── WeatherForecast.vue
-│   ├── WeatherForecastList.vue
-│   └── WeatherMetric.vue
-├── App.vue
-└── main.js
-```
