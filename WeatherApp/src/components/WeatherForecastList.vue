@@ -29,7 +29,7 @@ defineProps({
 <style scoped>
 .forecast-container {
   flex-grow: 1;
-  max-height: 200px;
+  max-height: 160px;
   overflow: auto;
   padding-right: 12px;
   scroll-behavior: smooth;
@@ -37,13 +37,19 @@ defineProps({
 
 
 .forecast-container::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 .forecast-container::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.3);
-  border-radius: 4px;
+  border-radius: 3px;
 }
 .forecast-container::-webkit-scrollbar-track {
   background: transparent;
+}
+
+@media (min-width: 768px) {
+  .forecast-container {
+    max-height: 200px;
+  }
 }
 </style>

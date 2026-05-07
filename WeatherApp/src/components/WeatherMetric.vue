@@ -1,7 +1,7 @@
 <template>
-    <div class="d-flex flex-row align-items-center">
-      <p class="d-flex flex-fill align-items-center" :class="{ 'me-2 mb-0': isPressure }">{{ label }}</p>
-      <p class="align-items-center me-2  mb-3" >{{ value }}</p>
+    <div class="d-flex flex-row align-items-center weather-metric-row">
+      <span class="metric-label">{{ label }}</span>
+      <span class="metric-value">{{ value }}</span>
       <img
         :src="iconSrc"
         :alt="iconAlt || label"
@@ -15,7 +15,9 @@
   
   
   <script setup>
-  defineProps({
+  import { computed } from 'vue';
+
+  const props = defineProps({
     label: {
       type: String,
       required: true
@@ -49,5 +51,26 @@
       default: null
     }
   });
-  
-  </script>
+
+</script>
+
+<style scoped>
+.weather-metric-row {
+  font-size: 0.85rem;
+}
+
+.metric-label {
+  flex: 1;
+}
+
+.metric-value {
+  margin-right: 0.5rem;
+  white-space: nowrap;
+}
+
+@media (min-width: 768px) {
+  .weather-metric-row {
+    font-size: 1rem;
+  }
+}
+</style>

@@ -1,9 +1,9 @@
 <template>
   <div>
     <p class="mt-3 mb-3 text-light">Weather Details...</p>
-    <div class="ms-3">
-      <h6 class="mb-4">THUNDERSTORM WITH LIGHT DRIZZLE</h6>
-      <div class="d-flex flex-column">
+    <div class="ms-1 ms-md-3">
+      <h6 class="mb-4">{{ condition }}</h6>
+      <div class="d-flex flex-column weather-metrics">
         <WeatherMetric
           v-for="metric in metrics"
           :key="metric.label"
@@ -33,14 +33,15 @@ const props = defineProps({
   cloudy: String,
   wind: String,
   pressure: String,
-  briefInformation: String
+  condition: String,
+  windStyle: String
 });
 
 const metrics = computed(() =>  [
   {
     label: 'Temp max',
-    value: props.temperatureMax , 
-    iconSrc: '/WeatherApp/temp_max.svg',
+    value: props.temperatureMax, 
+    iconSrc: '/WeatherApp/temp_max.svg', 
     iconClass: 'd-flex align-self-center me-5 mb-2',
     iconStyle: 'margin-top: -5px;',
     iconAlt: 'Temp max',
@@ -74,13 +75,13 @@ const metrics = computed(() =>  [
     value: props.wind,
     iconSrc: '/WeatherApp/wind.svg',
     iconClass: 'd-flex align-self-center me-5 mb-2',
-    iconStyle: 'margin-top: -5px;',
+    iconStyle: props.windStyle || 'margin-top: -5px;',
     iconAlt: 'Wind',
   },
   {
     label: 'Pressure',
     value: props.pressure,
-    iconSrc: '/WeatherApp/preasure.svg',
+    iconSrc: '/WeatherApp/pressure.svg',
     iconClass: 'd-flex align-self-center me-5 mb-2 weather-icon',
     iconStyle: 'margin-top: -5px;',
     iconAlt: 'Pressure',

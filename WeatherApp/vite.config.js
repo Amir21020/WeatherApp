@@ -6,11 +6,9 @@ export default defineConfig({
   plugins: [vue()],
   base: '/WeatherApp/',
   server: {
-    fs: {
-      strict: true,
-      deny: ['.env', '*.pem'], 
-      allow: ['src'] 
-    }
+    host: '0.0.0.0',
+    port: 5173,
+    strictPort: true,
   },
   build: {
     outDir: 'dist',

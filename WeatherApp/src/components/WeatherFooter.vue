@@ -1,20 +1,20 @@
 <template>
-  <div class="bottom-text" style="margin: 5%;">
-    <div class="d-flex align-items-start ms-5">
-      <p class="me-3" style="font-size: 8rem; line-height: 1;">{{ temperature }}</p>
-      <div class="d-flex flex-column align-items-start" style="line-height: 1.45;">
-        <p class="mb-0" style="font-size: 4rem;">{{ location }}</p>
-        <p class="mb-0" style="font-size: 1.15rem;">{{ formattedTime }}</p>
+  <div class="bottom-text">
+    <div class="d-flex align-items-start ms-3 ms-md-5 weather-footer-content">
+      <p class="me-3 weather-temp">{{ temperature }}</p>
+      <div class="d-flex flex-column align-items-start weather-info">
+        <p class="mb-0 weather-location">{{ location }}</p>
+        <p class="mb-0 weather-time">{{ formattedTime }}</p>
       </div>
       <img
-       :src="weatherIcon" :alt="weatherCondition" class="ms-3 align-self-start"
-        style="width: 80px;  margin-top: 2.3%;">
+       :src="weatherIcon" :alt="weatherCondition" class="ms-3 align-self-start weather-icon-lg">
     </div>
   </div>
 </template>
 
 <script setup>
-import { computed, onMounted, onBeforeUnmount, ref, watch } from 'vue';
+import { toRef } from 'vue';
+import { useClock } from '../composables/useClock.js';
 
 const props = defineProps({
   temperature: {
@@ -39,53 +39,7 @@ const props = defineProps({
   },
 });
 
-const currentTime = ref(
-  props.time && !isNaN(new Date(props.time)) ? new Date(props.time) : new Date()
-);
-
-
-watch(
-  () => props.time,
-  (newTime) => {
-    console.log('Watch triggered - new props.time:', newTime);
-    if (newTime && !isNaN(new Date(newTime))) {
-      currentTime.value = new Date(newTime);
-      console.log('Updated currentTime:', currentTime.value);
-    } else {
-      console.warn('Invalid props.time, using current time:', newTime);
-      currentTime.value = new Date();
-    }
-  },
-  { immediate: true }
-);
-
-let intervalId;
-onMounted(() => {
-  console.log('WeatherFooter mounted, starting interval');
-  intervalId = setInterval(() => {
-    currentTime.value = new Date(currentTime.value.getTime() + 60000);
-    console.log('Interval tick - currentTime:', currentTime.value);
-  }, 60000); 
-});
-
-onBeforeUnmount(() => {
-  console.log('WeatherFooter unmounting, clearing interval');
-  clearInterval(intervalId);
-});
-
-const formattedTime = computed(() => {
-  const date = currentTime.value;
-  console.log('Computing formattedTime:', date);
-
-  const hours = String(date.getHours()).padStart(2, '0');
-  const minutes = String(date.getMinutes()).padStart(2, '0');
-  const day = date.getDate();
-  const month = date.toLocaleString('en-US', { month: 'short' });
-  const year = String(date.getFullYear()).slice(-2);
-  const weekday = date.toLocaleString('en-US', { weekday: 'long' });
-
-  return `${hours}:${minutes} - ${weekday}, ${day} ${month} '${year}`;
-});
+const { formattedTime } = useClock(toRef(props, 'time'));
 </script>
 
 <style scoped>
@@ -95,5 +49,42 @@ const formattedTime = computed(() => {
   left: 0;
   right: 0;
   padding: 1rem;
+}
+
+.weather-temp {
+  font-size: 4rem;
+  line-height: 1;
+}
+
+.weather-location {
+  font-size: 2rem;
+}
+
+.weather-time {
+  font-size: 1rem;
+}
+
+.weather-icon-lg {
+  width: 60px;
+  margin-top: 0.5rem;
+}
+
+@media (min-width: 768px) {
+  .weather-temp {
+    font-size: 8rem;
+  }
+
+  .weather-location {
+    font-size: 4rem;
+  }
+
+  .weather-time {
+    font-size: 1.15rem;
+  }
+
+  .weather-icon-lg {
+    width: 80px;
+    margin-top: 2.3%;
+  }
 }
 </style>
